@@ -1,5 +1,5 @@
 from django.db import models
-import timezone
+from django.utils import timezone
 
 # Create your models here.
 DAY = 86400 # seconds in a day
