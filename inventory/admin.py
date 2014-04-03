@@ -13,4 +13,4 @@ class SupplierAdmin(admin.ModelAdmin):
 
 admin.site.register(Part)
 admin.site.register(Bin)
-admin.site.register(SupplierAdmin)
+admin.site.register(Supplier, SupplierAdmin)
