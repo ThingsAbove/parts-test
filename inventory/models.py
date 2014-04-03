@@ -22,3 +22,5 @@ class Bin(models.Model):
     count = models.IntegerField(default=0)
     location = models.CharField(max_length=200)
     replenish_date = models.DateTimeField('date replenished')
+    def was_replenished_within_the_week(self):
+        return self.pub_date >= timezone.now() - datetime.timedelta(days=7)
