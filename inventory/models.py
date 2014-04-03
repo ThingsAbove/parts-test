@@ -1,6 +1,7 @@
 from django.db import models
 from django.utils import timezone
 from django.core.exceptions import ValidationError
+import datetime
 
 # Create your models here.
 SECS_IN_DAY = 86400 # seconds in a day
