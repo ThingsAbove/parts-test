@@ -1,6 +1,7 @@
 from django.db import models
 
 # Create your models here.
+DAY = 86400 # seconds in a day
     
 class Supplier(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
@@ -23,5 +24,5 @@ class Bin(models.Model):
     count = models.IntegerField(default=0)
     location = models.CharField(max_length=200)
     replenish_date = models.DateTimeField('date replenished')
-    def was_replenished_within_the_week(self):
-        return self.pub_date >= timezone.now() - datetime.timedelta(days=7)
+    def days_since_replenished(self):
+        return int((timezone.now() - self.pub_date).total_seconds/DAYS)
