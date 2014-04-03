@@ -7,7 +7,7 @@ class PartInline(admin.StackedInline):
     model = Part
     extra = 3
     
-class SupplierAdmin(admin.Modeladmin):
+class SupplierAdmin(admin.ModelAdmin):
     fields = ['name']
     inlines = [PartInline]    
 
