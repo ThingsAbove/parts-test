@@ -17,6 +17,7 @@ class SupplierAdmin(admin.ModelAdmin):
 class BinAdmin(admin.ModelAdmin):
     fields = ['part_type','capacity','count','location','replenish_date']
     list_display = ('part_type','capacity','count','location','replenish_date','days_since_replenished')
+    list_filter = ['replenish_date']
 
 admin.site.register(Part, PartAdmin)
 admin.site.register(Bin, BinAdmin)
