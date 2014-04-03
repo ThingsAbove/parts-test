@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from django.core.exceptions import ValidationError
 
 # Create your models here.
 SECS_IN_DAY = 86400 # seconds in a day
@@ -33,3 +34,11 @@ class Bin(models.Model):
             return ("%.0f" % p)
         else:
             return "NA"
+    def clean(self):
+        # Don't allow count to exceed capacity.
+        if self.count > self.capacity:
+            raise ValidationError('Count cannot exceed Capacity')
+        # replenish_date cannot be in the future
+        if self.replenish_date > datetime.date.today():
+            raise ValidationError('Replenish date cannot be in the future')
+
