@@ -2,7 +2,7 @@ from django.db import models
 from django.utils import timezone
 
 # Create your models here.
-DAY = 86400 # seconds in a day
+SECS_IN_DAY = 86400 # seconds in a day
     
 class Supplier(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
@@ -26,4 +26,4 @@ class Bin(models.Model):
     location = models.CharField(max_length=200)
     replenish_date = models.DateTimeField('date replenished')
     def days_since_replenished(self):
-        return int((timezone.now() - self.replenish_date).total_seconds/DAYS)
+        return int((timezone.now() - self.replenish_date).total_seconds/SECS_IN_DAY)
