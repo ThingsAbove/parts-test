@@ -3,6 +3,12 @@ from django.contrib import admin
 # Register your models here.
 from inventory.models import Supplier,Part,Bin
 
-admin.site.register(Supplier)
-admin.site.register(Part)
-admin.site.register(Bin)
+class PartInline(admin.StackedInline)
+    model = Part
+    extra = 3
+    
+class SupplierAdmin(admin.Modeladmin)
+    fields = ['name']
+    inlines = [PartInline]    
+
+admin.site.register(Supplier,Part,Bin)
