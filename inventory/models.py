@@ -6,6 +6,7 @@ class Supplier(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return self.name    
     name = models.CharField(max_length=200)
+    contact = models.CharField(max_length=200)
 
 class Part(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):

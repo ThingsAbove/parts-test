@@ -8,9 +8,9 @@ class PartInline(admin.StackedInline):
     extra = 3
     
 class SupplierAdmin(admin.ModelAdmin):
-    fields = ['name']
+    fields = ['name', 'contact']
     inlines = [PartInline]    
 
-admin.site.register(SupplierAdmin)
 admin.site.register(Part)
 admin.site.register(Bin)
+admin.site.register(SupplierAdmin)
