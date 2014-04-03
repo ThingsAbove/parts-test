@@ -3,11 +3,11 @@ from django.contrib import admin
 # Register your models here.
 from inventory.models import Supplier,Part,Bin
 
-class PartInline(admin.StackedInline)
+class PartInline(admin.StackedInline):
     model = Part
     extra = 3
     
-class SupplierAdmin(admin.Modeladmin)
+class SupplierAdmin(admin.Modeladmin):
     fields = ['name']
     inlines = [PartInline]    
 
