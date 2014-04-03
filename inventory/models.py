@@ -26,4 +26,4 @@ class Bin(models.Model):
     location = models.CharField(max_length=200)
     replenish_date = models.DateTimeField('date replenished')
     def days_since_replenished(self):
-        return int((timezone.now() - self.replenish_date).total_seconds/SECS_IN_DAY)
+        return int(((timezone.now() - self.replenish_date).total_seconds)/SECS_IN_DAY)
