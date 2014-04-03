@@ -28,5 +28,8 @@ class Bin(models.Model):
     def days_since_replenished(self):
         return int(((timezone.now() - self.replenish_date).total_seconds())/SECS_IN_DAY)
     def percent_remaining(self):
-        p = (float(self.count) / float(self.capacity)) * 100
-        return ("%.2f" % p)
+        if self.capacity:
+            p = (float(self.count) / float(self.capacity)) * 100
+            return ("%.0f" % p)
+        else:
+            return "NA"
