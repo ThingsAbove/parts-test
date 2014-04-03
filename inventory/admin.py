@@ -11,4 +11,6 @@ class SupplierAdmin(admin.ModelAdmin):
     fields = ['name']
     inlines = [PartInline]    
 
-admin.site.register(Supplier,Part,Bin)
+admin.site.register(SupplierAdmin)
+admin.site.register(Part)
+admin.site.register(Bin)
