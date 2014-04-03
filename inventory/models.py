@@ -27,3 +27,5 @@ class Bin(models.Model):
     replenish_date = models.DateTimeField('date replenished')
     def days_since_replenished(self):
         return int(((timezone.now() - self.replenish_date).total_seconds())/SECS_IN_DAY)
+    def percent_remaining(self):
+        return (float(self.count) / float(self.capacity)) * 100
