@@ -1,3 +1,6 @@
-venv
+bin
+lib
+include
+.Python
 *.pyc
 staticfiles
