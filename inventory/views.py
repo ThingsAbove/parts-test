@@ -1,23 +1,23 @@
-from django.shortcuts import render
-from django.http import HttpResponse  
-from django.template import RequestContext, loader
+from django.shortcuts import render, get_object_or_404
+from django.http import HttpResponse
+from django_tables2   import RequestConfig
 from inventory.models import Part
+from inventory.tables import PartTable
 
 # Create your views here.
 
 def index(request):
-    parts_list = Part.objects.order_by('name')
-    template = loader.get_template('inventory/index.html')
-    context = RequestContext(request, {
-        'parts_list': parts_list,
-    })
-    return HttpResponse(template.render(context))
+    table = PartTable(Part.objects.all())
+    RequestConfig(request).configure(table)
+    return render(request, 'inventory/index.html', {'table': table})
 
 def detail(request, inventory_id):
-    return HttpResponse("You're looking at part_id %s." % inventory_id)
+    part = get_object_or_404(Part, pk=inventory_id)
+    return render(request, 'inventory/detail.html', {'part': part})
 
 def results(request, inventory_id):
     return HttpResponse("You're looking at the results of inventory balance %s." % inventory_id)
 
 def balance(request, inventory_id):
     return HttpResponse("You're balancing inventory %s." % inventory_id)
+    

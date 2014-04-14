@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+
+{% block title %}Inventory{% endblock %}
+
+{% block navbar-active-home %}active{% endblock %}
+
+{% block content %}
+    <script type='text/javascript' src='https://www.google.com/jsapi'></script>
+    <script type='text/javascript'>
+      google.load('visualization', '1', {packages:['table']});
+      google.setOnLoadCallback(drawTable);
+      function drawTable() {
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Name');
+        data.addColumn('number', 'id');
+        data.addColumn('string', 'Supplier');
+        data.addColumn('string', 'Description');
+       {%  if parts_list %}
+            data.addRows([
+            {% for part in parts_list %}   
+                ['{{ part.name|escapejs }}', {{ part.id }}, '{{ part.supplier|escapejs }}', '{{ part.description|escapejs }}'],
+            {% endfor %}
+        ]);
+        {%  endif %}
+
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+        var view = new google.visualization.DataView(data);
+        view.hideColumns([1]);
+        
+        var formatter = new google.visualization.PatternFormat('<a href="{% url "index" %}{1}">{0}</a>');
+        formatter.format(data, [0, 1]); // Apply formatter and set the formatted value of the first column.
+
+        table.draw(view, {allowHtml: true, showRowNumber: true});
+      }
+    </script>
+
+
+  <body>
+    <div id='table_div'></div>
+  </body>
+{% endblock %}
+
+<!--{% if parts_list %}
+    <ul>
+    {% for part in parts_list %}
+        <li><a href="/inventory/{{ part.id }}/">{{ part.name }}</a></li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No parts are available.</p>
+{% endif %} -->
