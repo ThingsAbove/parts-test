@@ -7,8 +7,8 @@ from inventory.tables import PartTable
 # Create your views here.
 
 def index(request):
-    table = PartTable(Part.objects.all())
-    RequestConfig(request).configure(table)
+    table = PartTable(Part.objects.all().order_by('name'))
+    RequestConfig(request,paginate={"per_page": 10}).configure(table)
     return render(request, 'inventory/index.html', {'table': table})
 
 def detail(request, inventory_id):

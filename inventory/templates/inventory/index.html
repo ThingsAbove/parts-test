@@ -1,10 +1,9 @@
+{% extends 'base.html' %}
 {% load render_table from django_tables2 %}
-<!doctype html>
-<html>
-    <head>
-        <link rel="stylesheet" href="{{ STATIC_URL }}django_tables2/themes/paleblue/css/screen.css" />
-    </head>
-    <body>
+{% block title %}Inventory{% endblock %}
+
+{% block navbar-active-home %}active{% endblock %}
+
+{% block content %}
         {% render_table table %}
-    </body>
-</html>
+{% endblock %}
