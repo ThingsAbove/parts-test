@@ -23,7 +23,9 @@
 			width: 100%; 
 			position: relative; 
 			box-shadow: 0 0 50px rgba(0,0,0,0.8);
-			padding: 200px 0;
+			padding: 80px 0;
+			color: white;
+			text-shadow: black -0.3em -0.3em 1em;
 		}
 		#parts{ 
 			background: url(images/parts.png) 50% 0 fixed; 
@@ -42,7 +44,8 @@
 			position: relative; 
 			box-shadow: 0 0 50px rgba(0,0,0,0.8);
 			padding: 100px 0;
-			color: #fff;
+			color: white;
+			text-shadow: black 0.2em 0.2em 0.2em;
 		}
 		
 	</style>
@@ -62,9 +65,10 @@
 		
 				// background position
 				var coords = '50% '+ yPos + 'px';
-		
+				
 				// move the background
 				$scroll.css({ backgroundPosition: coords });    
+
 			  }); // end window scroll
 		   });  // end section function
 		}); // close out script
@@ -94,7 +98,21 @@
 
 <!-- Section 1 -->
 <section id="intro" data-speed="6" data-type="background">
-
+<div class="row">
+	<div class="container">
+		<div class = "col-md-8">
+			<h1>Ye Olde Inventory App</h1>
+		</div>
+		<div class = "col-md-4">
+			<h4>
+			This is a sample web application that creates and maintains information for an inventory system 
+			consisting of parts, suppliers and bins.  It is built using the Django framework with Python.  <br><br>The data is
+			stored in a Postgres database and runs in a full stack cloud service.<br><br>
+			This application demonstrates how an application as a service can be run from the cloud.
+			</h4>
+		</div>
+	</div>
+</div>
 </section>
 <!-- Section 2 -->
 <section id="parts" data-speed="4" data-type="background" >
@@ -104,16 +122,18 @@
   </div>
 </section>
   <!-- Section 3 -->
-<section id="about" data-speed="2" data-type="background"> <div class="row">
+<section id="about" data-speed="2" data-type="background"> 
+   <div class="row">
 	<div class="container">
 	  <div class = "col-md-8">
 		  <h2>About Inventory Example</h2>
 	  </div>
 	  <div class = "col-md-4">
-	  	<a class="btn btn-primary btn-lg btn-block">Learn more </a>
+	  	<a class="btn btn-primary btn-lg btn-block" href="http://www.example.com">Learn more </a>
 	  </div>
   </div>
+  </div>
 </section>
-</div>
+
 {% endblock %}
 </html>
