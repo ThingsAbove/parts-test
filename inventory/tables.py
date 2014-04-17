@@ -12,6 +12,7 @@ class PartTable(tables.Table):
 	class Meta:
 		model = Part
 		# add class="paleblue" to <table> tag
-		sequence = ('name','supplier','description')
+		sequence = ('name','supplier','description',)
+		exclude = ('id', 'cost_currency',)
 		attrs = {"class": "table table-striped"}
 		template = ('table.html')
