@@ -34,6 +34,13 @@ class Part(models.Model):
     )
     part_class = models.CharField(max_length=1, choices=PART_CLASS_CHOICES, default=PART_CLASS_C)
 
+class DemandLog(models.Model):
+    def __unicode__(self):
+        return (str(self.time) + ':' + str(self.part_type) + ':' + str(self.amount))
+    time = models.DateTimeField(default=timezone.now())
+    part_type = models.ForeignKey(Part)
+    amount = models.IntegerField(default=0)
+
 class Bin(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return (self.location + ':' + str(self.part_type))
@@ -49,7 +56,7 @@ class Bin(models.Model):
         else:
             return (Money(0,'USD'))
     
-    def contains_part_class_category(self):
+    def part_class_category_contents(self):
         if self.part_type:
             return (self.part_type.part_class)
         else:
@@ -64,7 +71,15 @@ class Bin(models.Model):
             return ("%.0f" % p)
         else:
             return "NA"
-
+    def pull(self, to_pull=1):
+        if ((self.count - to_pull) >= 0):
+            self.count = self.count - to_pull
+            self.save()
+            dl=DemandLog(time=timezone.now(), part_type=self.part_type, amount=to_pull)
+            dl.save()
+            return self.count
+        else:
+            return ValidationError('Cannot pull beyond empty')
     def clean(self):
         # Don't allow count to exceed capacity.
         if self.count > self.capacity:
@@ -73,33 +88,26 @@ class Bin(models.Model):
         if self.replenish_date > timezone.now():
             raise ValidationError('Replenish date cannot be in the future')
 
-class Warehouse(models.Model):
+class Facility(models.Model):
     def __unicode__(self):
             return self.name
     name = models.CharField(max_length=200)
-    bins = models.ManyToManyField(Bin)
+    bins = models.ManyToManyField(Bin, through="BinOwnership")
     def number_of_bins(self):
-        if bins:
-            return bins.objects.count()
+        if self.bins:
+            return self.bins.objects.count()
         else:
             return 0
-    def number_of_part_class_a_bins(self):
-        if bins:
-            return (bins.objects.filter(bins__part_type__part_class=Part.PART_CLASS_A).count())
-        else:
-            return 0
-    def number_of_part_class_b_bins(self):
-        if bins:
-            return (bins.objects.filter(bins__part_type__part_class=Part.PART_CLASS_B).count())
-        else:
-            return 0
-    def number_of_part_class_c_bins(self):
-        if bins:
-            return (bins.objects.filter(bins__part_type__part_class=Part.PART_CLASS_C).count())
-        else:
-            return 0
-    def total_cost(self):
-        if bins:
-            return (bins.objects.aggregate(Sum(part_type.cost)))
-        else:
-            return Money(0,'USD')
+            
+class BinOwnership(models.Model):
+    bin = models.ForeignKey(Bin)
+    facility = models.ForeignKey(Facility)
+    start_date = models.DateTimeField('Ownership start date')
+    end_date = models.DateTimeField('Ownership end date', blank=True, null=True)
+    def clean(self):
+        # Don't allow end_date before start_date
+        if self.end_date:
+            if self.end_date < self.start_date:
+                raise ValidationError('End date cannot preceed Start Date')
+    
+ 
