@@ -1,0 +1,77 @@
+(InteractiveConsole)
+>>> from inventory.models import Bin,Facility,BinOwnership
+
+>>> facilities= Facility.objects.filter(name='warehouse 13')
+>>> facilities
+[<Facility: warehouse 13>]
+
+>>> f= Facility.objects.filter(bins=b[1])
+>>> f
+[<Facility: warehouse 13>]
+>>> f= Facility.objects.filter(bins=b[2])
+>>> f
+[<Facility: warehouse 13>]
+>>> Facility.objects.filter(bins=b[2])
+[<Facility: warehouse 13>]
+>>> Facility.objects.filter(bins=b[3])
+[<Facility: Roscoe>]
+
+>>> Bin.objects.filter(facility__in=f)
+[<Bin: Station 1:bolt-3:class:C:cost-per:US$0.75>, <Bin: Station 1:bolt-2:class:C:cost-per:US$0.35>, <Bin: Station 1:bolt-1:class:C:cost-per:US$0.50>]
+
+>>> Bin.objects.filter(part_type__part_class='C')
+[<Bin: Station 1:bolt-1:class:C:cost-per:US$0.50>, <Bin: Station 1:bolt-2:class:C:cost-per:US$0.35>, <Bin: Station 1:bolt-3:class:C:cost-per:US$0.75>, <Bin: Station 1:b-washer-837:class:C:cost-per:US$0.01>]
+
+>>> Bin.objects.filter(part_type__part_class='C',part_type__cost__gte='.5')
+[<Bin: Station 1:bolt-1:class:C:cost-per:US$0.50>, <Bin: Station 1:bolt-3:class:C:cost-per:US$0.75>]
+>>> Bin.objects.filter(part_type__part_class='C',part_type__cost__gte='.51')
+[<Bin: Station 1:bolt-3:class:C:cost-per:US$0.75>]
+>>> Bin.objects.filter(part_type__part_class='C').aggregate(total=Sum('part_type__cost')
+... )
+{'total': Decimal('1.61')}
+>>> 
+
+
+>>> f=Facility.objects.filter(name='Roscoe')
+>>> Bin.objects.filter(facility__in=f)
+[<Bin: Station 1:b-washer-837:class:C:cost-per:US$0.01>]
+>>> Bin.objects.filter(facility__in=f).count()
+1
+>>> f=Facility.objects.filter(name__contains='w')
+>>> f
+[<Facility: warehouse 13>]
+>>> Bin.objects.filter(facility__in=f).count()
+3
+
+>>> Bin.objects.filter(facility__in=f)
+[<Bin: Station 1:bolt-3:class:C:cost-per:US$0.75>, <Bin: Station 1:bolt-2:class:C:cost-per:US$0.35>, <Bin: Station 1:bolt-1:class:C:cost-per:US$0.50>]
+
+>>> Bin.objects.filter(facility__in=f).count()
+3
+>>> Facility.objects.aggregate(total_cost=Sum('bins__part_type__cost'))
+{'total_cost': Decimal('1.61')}
+>>> Facility.objects.aggregate(total_count=Sum('bins__count'))
+{'total_count': 770}
+
+total_cost=Facility.objects.aggregate(total_cost=Sum('bins__part_type__cost'))
+>>> total_count=Facility.objects.aggregate(total_count=Sum('bins__count'))      >>> total_cost
+{'total_cost': Decimal('1.61')}
+>>> total_cost['total_cost']
+Decimal('1.61')
+>>> total_cost['total_cost']*total_count['total_count']
+Decimal('1239.70')
+
+>>> Money(total_cost['total_cost']*total_count['total_count'],'USD')
+1239 USD
+
+>>> p1
+[<Part: b-nut-#11:class:C:cost-per:US$0.08>, <Part: bolt-2:class:C:cost-per:US$0.35>, <Part: b-washer-837:class:C:cost-per:US$0.01>, <Part: bolt-3:class:C:cost-per:US$0.75>, <Part: band clamp-11:class:C:cost-per:US$2.00>, <Part: b-bolt-22:class:C:cost-per:US$2.50>, <Part: bolt-1:class:C:cost-per:US$0.50>]
+
+>>> Bin.objects.aggregate(Sum('part_typ__cost'))
+Traceback (most recent call last):
+
+	"Choices are: %s" % (name, ", ".join(available)))
+FieldError: Cannot resolve keyword 'part_typ' into field. Choices are: binownership, capacity, count, facility, id, location, part_type, replenish_date
+>>> Bin.objects.aggregate(Sum('part_type__cost'))
+{'part_type__cost__sum': Decimal('1.61')}
+

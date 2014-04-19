@@ -3,7 +3,7 @@ import moneyed
 from djmoney.models.fields import MoneyField
 
 # Register your models here.
-from inventory.models import Supplier,Part,Bin,Facility,BinOwnership,DemandLog
+from inventory.models import Supplier,Part,Bin,Facility,BinOwnership,DemandLog,Location
 
 class PartInline(admin.TabularInline):
 	model = Part
@@ -14,7 +14,10 @@ class PartAdmin(admin.ModelAdmin):
 	  
 class SupplierAdmin(admin.ModelAdmin):
 	fields = ['name', 'contact']
-	inlines = [PartInline]    
+
+	
+class LocationAdmin(admin.ModelAdmin):
+	fields = ['name', 'description']
 	
 class BinAdmin(admin.ModelAdmin):
 	fields = ['part_type','capacity','count','location','replenish_date']
@@ -37,4 +40,5 @@ admin.site.register(Bin, BinAdmin)
 admin.site.register(Supplier, SupplierAdmin)
 admin.site.register(Facility,FacilityAdmin)
 admin.site.register(DemandLog,DemandLogAdmin)
+admin.site.register(Location, LocationAdmin)
 

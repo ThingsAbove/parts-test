@@ -19,7 +19,7 @@ class Part(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return (self.name + ':class:' + self.part_class +':cost-per:' + str(self.cost))     
     supplier = models.ForeignKey(Supplier)
-    name = models.CharField(max_length=200)
+    name = models.CharField(max_length=200,verbose_name="Part Name")
     description = models.CharField(max_length=200)
     cost = MoneyField(max_digits=10, decimal_places=2, default_currency='USD')
     PART_CLASS_A = 'A'
@@ -41,13 +41,19 @@ class DemandLog(models.Model):
     part_type = models.ForeignKey(Part)
     amount = models.IntegerField(default=0)
 
+class Location(models.Model):
+    def __unicode__(self):  # Python 3: def __str__(self):
+        return self.name
+    name = models.CharField(max_length=120)
+    description = models.CharField(max_length=200, blank=True, null=True)
+    
 class Bin(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
         return (self.location + ':' + str(self.part_type))
     part_type = models.ForeignKey(Part)
     capacity = models.IntegerField(default=100)
     count = models.IntegerField(default=0)
-    location = models.CharField(max_length=200)
+    location = models.ForeignKey(Location)
     replenish_date = models.DateTimeField('date replenished')
           
     def cost(self):
