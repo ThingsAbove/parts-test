@@ -49,7 +49,7 @@ class Location(models.Model):
     
 class Bin(models.Model):
     def __unicode__(self):  # Python 3: def __str__(self):
-        return (self.location + ':' + str(self.part_type))
+        return (str(self.location.name) + ':' + str(self.part_type))
     part_type = models.ForeignKey(Part)
     capacity = models.IntegerField(default=100)
     count = models.IntegerField(default=0)
