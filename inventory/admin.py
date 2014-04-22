@@ -22,7 +22,7 @@ class LocationAdmin(admin.ModelAdmin):
 class BinAdmin(admin.ModelAdmin):
 	fields = ['part_type','capacity','count','location','replenish_date']
 	list_display = ('part_type', 'capacity','count','cost','percent_remaining', 'location', 'replenish_date', 'days_since_replenished',)
-	list_filter = ['replenish_date','count']
+	list_filter = ['replenish_date']
 	
 class BinInline(admin.TabularInline):
 	model=Facility.bins.through

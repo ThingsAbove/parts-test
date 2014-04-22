@@ -1,0 +1,144 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+<title>Part Demand Graph</title>
+
+<style type="text/css">
+body { font-family: Verdana, Arial, sans-serif; font-size: 12px; }
+h1 { width: 600px; margin: 0 auto; font-size: 12px; text-align: center; }
+#placeholder { width: 600px; height: 200px; position: relative; margin: 0 auto; }
+.legend table, .legend > div { height: 82px !important; opacity: 1 !important; right: -55px; top: 10px; width: 116px !important; }
+.legend table { border: 1px solid #555; padding: 5px; }
+#flot-tooltip { font-size: 12px; font-family: Verdana, Arial, sans-serif; position: absolute; display: none; border: 2px solid; padding: 2px; background-color: #FFF; opacity: 0.8; -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
+</style>
+
+<!--[if lte IE 8]><script type="text/javascript" language="javascript" src="excanvas.min.js"></script><![endif]-->
+<script type="text/javascript" language="javascript" src="{{STATIC_URL}}flot/jquery.min.js"></script>
+<script type="text/javascript" language="javascript" src="{{STATIC_URL}}flot/jquery.flot.js"></script>
+<script type="text/javascript" language="javascript" src="{{STATIC_URL}}flot/jquery.flot.time.js"></script>
+<script type="text/javascript" language="javascript" src="{{STATIC_URL}}flot/jquery.flot.axislabels.js"></script>
+<script type="text/javascript" language="javascript" src="{{STATIC_URL}}flot/jquery.flot.symbol.js"></script>
+
+
+<script type="text/javascript">
+var d1 = {{data_source}};
+
+//Rome, Italy
+// var d1 = [[1262304000000, 12], [1264982400000, 13], [1267401600000, 15], [1270080000000, 18], [1272672000000, 23], [1275350400000, 27], [1277942400000, 30], [1280620800000, 30], [1283299200000, 27], [1285891200000, 22], [1288569600000, 16], [1291161600000, 13]];
+
+var data1 = [
+	{label: "{{part_name|escape}}",  data: d1, points: { symbol: "circle", fillColor: "#058DC7" }, color: '#058DC7'}
+];
+
+$(document).ready(function () {
+	$.plot($("#placeholder"), data1, {
+		xaxis: {
+			min: {{start_date}},
+			max: {{end_date}},
+			mode: "time",
+			tickSize: [1, "month"],
+			monthNames: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+			tickLength: 0,
+			axisLabel: 'Month',
+			axisLabelUseCanvas: true,
+			axisLabelFontSizePixels: 12,
+			axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+			axisLabelPadding: 5
+		},
+		yaxis: {
+			axisLabel: 'Demand',
+			axisLabelUseCanvas: true,
+			axisLabelFontSizePixels: 12,
+			axisLabelFontFamily: 'Verdana, Arial, Helvetica, Tahoma, sans-serif',
+			axisLabelPadding: 5
+		},
+		series: {
+			lines: { show: true },
+			points: {
+				radius: 3,
+				show: true,
+				fill: true
+			},
+		},
+		grid: {
+			hoverable: true,
+			borderWidth: 1
+		},
+		legend: {
+			labelBoxBorderColor: "none",
+				position: "right"
+		}
+	});
+
+	function showTooltip(x, y, contents, z) {
+		$('<div id="flot-tooltip">' + contents + '</div>').css({
+			top: y - 30,
+			left: x - 135,
+			'border-color': z,
+		}).appendTo("body").fadeIn(200);
+	}
+
+	function getMonthName(numericMonth) {
+		var monthArray = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+		var alphaMonth = monthArray[numericMonth];
+
+		return alphaMonth;
+	}
+
+	function convertToDate(timestamp) {
+		var newDate = new Date(timestamp);
+		var dateString = newDate.getMonth();
+		// Create an array with the current hour, minute and second
+		var time = [ newDate.getHours(), newDate.getMinutes(), newDate.getSeconds() ];
+		// Determine AM or PM suffix based on the hour
+		var suffix = ( time[0] < 12 ) ? "AM" : "PM";
+		// Convert hour from military time
+		time[0] = ( time[0] < 12 ) ? time[0] : time[0] - 12;
+		
+		// If hour is 0, set it to 12
+		 time[0] = time[0] || 12;
+		
+		// If seconds and minutes are less than 10, add a zero
+		for ( var i = 1; i < 3; i++ ) {
+			if ( time[i] < 10 ) {
+			  time[i] = "0" + time[i];
+			}
+		}
+		var monthName = getMonthName(dateString);
+
+		return monthName + " " +  time.join(":") + " " + suffix;
+	}
+
+	var previousPoint = null;
+
+	$("#placeholder").bind("plothover", function (event, pos, item) {
+		if (item) {
+			if ((previousPoint != item.dataIndex) || (previousLabel != item.series.label)) {
+				previousPoint = item.dataIndex;
+				previousLabel = item.series.label;
+
+				$("#flot-tooltip").remove();
+
+				var x = convertToDate(item.datapoint[0]),
+				y = item.datapoint[1];
+				z = item.series.color;
+
+				showTooltip(item.pageX, item.pageY,
+					"<b>" + item.series.label + "</b><br /> " + x + " = " + y + " pulled",
+					z);
+			}
+		} else {
+			$("#flot-tooltip").remove();
+			previousPoint = null;
+		}
+	});
+});
+</script>
+</head>
+
+<body>
+	<h1>Demand Graph</h1>
+	<div id="placeholder"></div>
+</body>
+</html>

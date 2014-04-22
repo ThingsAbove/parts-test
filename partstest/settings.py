@@ -40,6 +40,7 @@ INSTALLED_APPS = (
     'bootstrap3',
     'moneyed',
     'djmoney',
+    'django_nvd3',
     'inventory',
 #    'south',
 )
