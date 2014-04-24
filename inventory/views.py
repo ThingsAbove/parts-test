@@ -48,9 +48,25 @@ def parts_by_class(request, part_class):
     return render(request, 'inventory/index.html', {'table': table})
     
 def detail(request, inventory_id):
-    part = get_object_or_404(Part, pk=inventory_id)
-    return render(request, 'inventory/detail.html', {'part': part})
-
+    part = get_object_or_404(Part, pk=inventory_id) 
+    # Determine the last valid demand log entry
+    dl=DemandLog.objects.filter(part_type = part).latest('time')
+    end_date = dl.time
+    start_date = dl.time - datetime.timedelta(days=5) # show last x-days of logs
+    part_name = part.name
+    queryset = DemandLog.objects.filter(time__range=(start_date,end_date),part_type = part)
+    
+    data_source=[]
+    for d in queryset:
+        data_source.append([turn_ts_to_jsts(d.time), d.amount])
+    
+    data = {'data_source': data_source}
+    data['part_name'] =  part_name
+    data['start_date']= turn_ts_to_jsts(start_date)
+    data['end_date']= turn_ts_to_jsts(end_date)
+    
+    return render(request,'inventory/detail.html', data)
+    
 def results(request, inventory_id):
     return HttpResponse("You're looking at the results of inventory balance %s." % inventory_id)
 
@@ -107,11 +123,14 @@ def barchart(request):
 def turn_ts_to_jsts(ts): # Turn a timestamp into a Javascript timestamp
     return (time.mktime(ts.timetuple()) *1000) 
     
-def linechart(request): 
-    start_date = timezone.now() - datetime.timedelta(days=30)
-    end_date = timezone.now()
-    part_name = "U7A 0A2"
-    queryset = DemandLog.objects.filter(time__range=(start_date,end_date),part_type__name = part_name)
+def linechart(request, inventory_id):
+    part = get_object_or_404(Part, pk=inventory_id) 
+    # Determine the last valid demand log entry
+    dl=DemandLog.objects.filter(part_type = part).latest('time')
+    end_date = dl.time
+    start_date = dl.time - datetime.timedelta(days=5) # show last x-days of logs
+    part_name = part.name
+    queryset = DemandLog.objects.filter(time__range=(start_date,end_date),part_type = part)
     
     data_source=[]
     for d in queryset:
