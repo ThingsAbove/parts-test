@@ -55,7 +55,8 @@ class Bin(models.Model):
     count = models.IntegerField(default=0)
     location = models.ForeignKey(Location)
     replenish_date = models.DateTimeField('date replenished')
-          
+    
+    @property   
     def cost(self):
         if self.part_type:
             return (self.part_type.cost * self.count)
@@ -68,9 +69,11 @@ class Bin(models.Model):
         else:
             return Part.PART_CLASS_UNKNOWN
             
+    @property
     def days_since_replenished(self):
         return int(((timezone.now() - self.replenish_date).total_seconds())/SECS_IN_DAY)
 
+    @property
     def percent_remaining(self):
         if self.capacity:
             p = (float(self.count) / float(self.capacity)) * 100

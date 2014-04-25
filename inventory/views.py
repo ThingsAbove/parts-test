@@ -64,6 +64,10 @@ def detail(request, inventory_id):
     data['part_name'] =  part_name
     data['start_date']= turn_ts_to_jsts(start_date)
     data['end_date']= turn_ts_to_jsts(end_date)
+    data['txt_start_date']=start_date
+    data['txt_end_date']=end_date
+    data['part']= part
+    data['bins']= Bin.objects.filter(part_type=part)
     
     return render(request,'inventory/detail.html', data)
     

@@ -13,15 +13,39 @@
 	
 	{% bootstrap_css %}
 	{% bootstrap_javascript %}
-<title>Part Demand Graph</title>
+
 
 <style type="text/css">
-body { font-family: Verdana, Arial, sans-serif; font-size: 12px; }
-h1 { width: 0 auto; margin: 0 auto; font-size: 12px; text-align: center; }
-#placeholder { width:  auto; height: 200px; position: relative; margin: 0 auto; }
-.legend table, .legend > div { height: 42px !important; opacity: 1 !important; right: -15px; top: 10px; width: 116px !important; }
-.legend table { border: 1px solid #555; padding: 5px; }
-#flot-tooltip { font-size: 12px; font-family: Verdana, Arial, sans-serif; position: absolute; display: none; border: 2px solid; padding: 2px; background-color: #FFF; opacity: 0.8; -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; }
+	#placeholder { width:  auto; height: 200px; position: relative; margin: 0 auto; }
+	.legend table, .legend > div { 
+		height: 22px !important; opacity: 0.8 !important; 
+		right: -15px; top: 10px; width: 116px !important; 
+	}
+	.legend table { border: 1px solid #555; padding: 5px; }
+	#flot-tooltip { 
+		font-size: 12px; font-family: Verdana, Arial, 
+		sans-serif; position: absolute; display: none; 
+		border: 2px solid; padding: 2px; background-color: #FFF; 
+		opacity: 0.8; -moz-border-radius: 5px; -webkit-border-radius: 5px; -khtml-border-radius: 5px; border-radius: 5px; 
+	}
+	body {
+	  padding-top: 60px;
+	}
+	@media (max-width: 979px) {
+	  body {
+		padding-top: 0px;
+	  }
+	}
+	.row-padded {
+	  padding: 35px;
+	  background-color: #F7F7F7;
+	  border: 1px solid #DDD;
+	}
+	.row-padded-for-graph {
+	  padding: 35px;
+	  background-color: #e6e6e6;
+	  border: 1px solid #DDD;
+	}
 </style>
 
 <!--[if lte IE 8]><script type="text/javascript" language="javascript" src="excanvas.min.js"></script><![endif]-->
@@ -141,6 +165,8 @@ $(document).ready(function () {
 	});
 });
 </script>
+
+<title>Part Demand Graph</title>
 </head>
 
 <body>
@@ -150,42 +176,88 @@ $(document).ready(function () {
  	  <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
  		<span class="icon-bar"></span>
  		<span class="icon-bar"></span>
- 		<span class="icon-bar"></span>
  	  </button>
  	  <a class="navbar-brand" href="#">Inventory Example Application</a>
  	</div>
  	<div class="collapse navbar-collapse">
  	  <ul class="nav navbar-nav navbar-right">
  		<li><a href="/">Home</a></li>
- 		<li class="active">Part Detail</li>
+ 		<li><a href="#placeholder">Part Detail</a></li>
  	  </ul>
  	</div><!--/.nav-collapse -->
    </div>
-</div>
-<section id="intro" data-speed="6" data-type="background">
-<div class="row">
-	<div class="container">
-		<div class = "col-md-8">
-			<h1>Details for Part {{part_name|escape}}</h1>
+   </div>
+<section id="graph">
+<div class="row row-padded" />
+	<div class="container"><h4>
+		<div class = "col-md-2">
+			Part: 
+			{{part_name|escape}}
+		</div>
+		<div class = "col-md-2">
+			Cost: 
+			{{part.cost}}
 		</div>
 		<div class = "col-md-4">
-			<h4>
-			This graph shows the last available week of part demand for .<br><br>
-			This application demonstrates how an application as a service can be run from the cloud.
-			</h4>
+			Description: 
+			{{part.description}}
 		</div>
+		<div class = "col-md-2">
+			Class: 
+			{{part.part_class}}
+		</div>
+		<div class = "col-md-2">
+			Supplier: 
+			{{part.supplier}}
+		</div></h4>
 	</div>
 </div>
-</section>
-<section id="graph"> 
-   <div class="row">
+
+<div class="row row-padded-for-graph">
 	<div class="container">
+		<div class = "col-md-3">
+		<h4>
+			This graph shows the last available week of part demand.<br><br>
+			From:<br> {{txt_start_date}}<br> to {{txt_end_date}}
+		</h4>
+		</div>
 	  <div class = "col-md-8">
-		<h1>Part Demand</h1>
 		<div id="placeholder"></div>
 	 </div>
    </div>
 </div>
 </section>  
+<section id="bin_info"><h4>
+	{% for bin in bins %}
+	<div class="row row-padded">
+		<div class="container">
+			<div class = "col-md-2">
+				Location: 
+				{{bin.location}}
+			</div>
+			<div class = "col-md-2">
+				Capacity: 
+				{{bin.capacity}}
+			</div>
+			<div class = "col-md-2">
+				Bin Count: 
+				{{bin.count}}
+			</div>
+			<div class = "col-md-2">
+				Percent Remaining: 
+				{{bin.percent_remaining}}
+			</div>
+			<div class = "col-md-2">
+				Total Bin Value: 
+				{{bin.cost}}
+			</div>
+			<div class = "col-md-2">
+				Last Replenish Date/Time: 
+				{{bin.replenish_date}}
+			</div>
+		</div>
+	{% endfor %}
+</div> </h4>
+</section>
 </body>
 </html>
