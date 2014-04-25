@@ -15,6 +15,10 @@ location_names=(
     'Workspace 2',
     'Workspace 1',
 )
+for loc_name in location_names:
+     if Location.objects.filter(name=loc_name).count() == 0:
+         Location(name=loc_name).save()
+    
 part_list = Part.objects.all() #get parts
 for p in part_list:
     p_num = randint(100,1000) # get random number of parts for bin
