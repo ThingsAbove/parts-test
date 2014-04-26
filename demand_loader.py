@@ -6,17 +6,20 @@ from django.utils import timezone
 DAYS_OF_DEMAND = 90
 
 part_list = Part.objects.all() #get parts
-for p in part_list:
-    
-    now=timezone.now()    
-    days_to_fill = DAYS_OF_DEMAND
-    try:
-        last_demand = DemandLog.objects.latest('time')
-        days_to_fill = (now - last_demand.time).days
-        print "Filling data for %(days)d days"%{'days': days_to_fill}
-    except e:
-        print "Problem getting last demandlog date" + e
+
+now=timezone.now()    
+days_to_fill = DAYS_OF_DEMAND
+try:
+    last_demand = DemandLog.objects.latest('time')
+    days_to_fill = (now - last_demand.time).days
+    print "Filling data for %(days)d days"%{'days': days_to_fill}
+except:
+    print "Problem getting last demandlog date" 
+
+if days_to_fill <= 0:
+    sys.exit() # Nothing to do
         
+for p in part_list:
     for d in range(days_to_fill,0,-1):
         t= now - timedelta(days=d)
         if t.weekday() in(5,6):

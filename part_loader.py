@@ -22,16 +22,22 @@ with open(sys.argv[1], 'rb') as csvfile:
         print row
         r_num = randint(1,10) #Inclusive
         s=Supplier.objects.get(name=row[1])
+        ss = 10 * randint(1,10)  # Safety Stock
+        lt = 7 * randint(1,4) # Lead time in days
         pclass = row[4]
         print "Rand is:" + str(r_num)
         if r_num in range(1,6):
-            pclass = 'C'            
+            pclass = 'C'
+            ss = ss *3 # Triple safety stock for class C  
+            lt = lt / 2 # Class C stock easier to come by         
             print "Class C"
         elif r_num in range(9,11):
             plcass = 'A'
+            lt = lt * 3 # Class A stock hardest to come by
             print "Class A"
         else:
             pclass = 'B'
+            ss = ss *2 # Double safety stock for class B
             print "Class B"
             
         m=float(row[3])
@@ -42,6 +48,6 @@ with open(sys.argv[1], 'rb') as csvfile:
         else:
             m = m * 2
         m=Money(str(m),'USD')
-        print m
-        p=Part(name=row[0], supplier=s, description=row[2], cost=m, part_class=pclass)
+
+        p=Part(name=row[0], supplier=s, description=row[2], cost=m, part_class=pclass, safety_stock=ss, lead_time=lt)
         p.save()

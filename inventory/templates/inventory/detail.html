@@ -31,13 +31,14 @@
 	body {
 	  padding-top: 60px;
 	}
-	@media (max-width: 979px) {
+	@media (max-width: 1200px) {
 	  body {
 		padding-top: 0px;
 	  }
 	}
 	.row-padded {
 	  padding: 35px;
+	  font-size: 18px;
 	  background-color: #F7F7F7;
 	  border: 1px solid #DDD;
 	}
@@ -118,7 +119,8 @@ $(document).ready(function () {
 
 	function convertToDate(timestamp) {
 		var newDate = new Date(timestamp);
-		var dateString = newDate.getMonth();
+		var monthString = newDate.getMonth()+1;
+		var dayOfMonth = newDate.getDate();
 		// Create an array with the current hour, minute and second
 		var time = [ newDate.getHours(), newDate.getMinutes(), newDate.getSeconds() ];
 		// Determine AM or PM suffix based on the hour
@@ -135,9 +137,7 @@ $(document).ready(function () {
 			  time[i] = "0" + time[i];
 			}
 		}
-		var monthName = getMonthName(dateString);
-
-		return monthName + " " +  time.join(":") + " " + suffix;
+		return monthString + "/" + dayOfMonth + " " + time.join(":") + " " + suffix;
 	}
 
 	var previousPoint = null;
@@ -166,7 +166,7 @@ $(document).ready(function () {
 });
 </script>
 
-<title>Part Demand Graph</title>
+<title>Part Details</title>
 </head>
 
 <body>
@@ -183,33 +183,46 @@ $(document).ready(function () {
  	  <ul class="nav navbar-nav navbar-right">
  		<li><a href="/">Home</a></li>
  		<li><a href="#placeholder">Part Detail</a></li>
+ 		<li><a href="/inventory/parts">Part List</a></li>
  	  </ul>
  	</div><!--/.nav-collapse -->
    </div>
    </div>
-<section id="graph">
+<section id="details">
 <div class="row row-padded" />
-	<div class="container"><h4>
-		<div class = "col-md-2">
-			Part: 
-			{{part_name|escape}}
+<div class="container">
+	<div class = "col-md-12">
+	<h1>
+		Part:  
+		{{part.name|escape}}
+	</h1>
+	</div>
+</div>
+<div class="row row-padded" />
+	<div class="container">
+		<div class = "col-md-12">
+			<h2>Details:</h2>
+			<div class = "col-md-2">
+				<b>Cost: </b> 
+				{{part.cost}}
+			</div>
+			<div class = "col-md-4">
+				<b>Description: </b> 
+				{{part.description}}
+			</div>
+			<div class = "col-md-2">
+				<b>Class: </b>
+				{{part.part_class}}
+			</div>
+			<div class = "col-md-2">
+				<b>Supplier: </b> 
+				{{part.supplier}}
+			</div>
+			<div class = "col-md-2">
+				<b>Saftey Stock: </b> 
+				{{part.safety_stock}}
+			</div>
 		</div>
-		<div class = "col-md-2">
-			Cost: 
-			{{part.cost}}
-		</div>
-		<div class = "col-md-4">
-			Description: 
-			{{part.description}}
-		</div>
-		<div class = "col-md-2">
-			Class: 
-			{{part.part_class}}
-		</div>
-		<div class = "col-md-2">
-			Supplier: 
-			{{part.supplier}}
-		</div></h4>
 	</div>
 </div>
 

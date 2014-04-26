@@ -23,16 +23,18 @@
 			width: 100%; 
 			position: relative; 
 			box-shadow: 0 0 50px rgba(0,0,0,0.8);
-			padding: 60px 0;
+			padding: 80px 0;
 			color: white;
 			text-shadow: black -0.3em -0.3em 1em;
 		}
 		#parts{ 
+			background: url(images/parts.png) 50% 0 fixed; 
 			height: auto;  
 			margin: 0 auto; 
 			width: 100%; 
 			position: relative; 
 			box-shadow: 0 0 50px rgba(0,0,0,0.8);
+			padding: 10px 0;
 		}
 		#about { 
 			background: url({{STATIC_URL}}images/office-background-medium.jpg) 50% 0 fixed; 
@@ -41,31 +43,11 @@
 			width: 100%; 
 			position: relative; 
 			box-shadow: 0 0 50px rgba(0,0,0,0.8);
-			padding: 40px 0;
+			padding: 100px 0;
 			color: white;
 			text-shadow: black 0.2em 0.2em 0.2em;
 		}
-		body {
-		  padding-top: 20px;
-		}
-		@media (max-width: 968px) {
-		  body {
-			padding-top: 0px;
-		  }
-		}		
-		.row-padded {
-		  box-shadow: 0 0 50px rgba(0,0,0,0.8);
-		  padding: 10px;
-		  font-size: 14px;
-		  background-color: #F7F7F7;
-		  border: 1px solid #DDD;
-		}
-		.row-padded-for-graph {
-		  padding: 10px;
-		  font-size: 22px;
-		  background-color: #e6e6e6;
-		  border: 1px solid #DDD;
-		}
+		
 	</style>
 	<script>
 		$(document).ready(function(){
@@ -91,9 +73,6 @@
 		   });  // end section function
 		}); // close out script
 	</script>
-	{% load nvd3_tags %}
-	{% include_chart_jscss %}
-	{% load_chart charttype chartdata chartcontainer extra %}
   </head>
  <body>
    <div class="navbar navbar-inverse navbar-fixed-top">
@@ -116,6 +95,7 @@
       </div><!--/.nav-collapse -->
     </div>
   </div>
+{% load render_table from django_tables2 %}
 
 <!-- Section 1 -->
 <section id="intro" data-speed="6" data-type="background">
@@ -138,32 +118,10 @@
 <!-- Section 2 -->
 <section id="parts" data-speed="4" data-type="background" >
 {% block content %}
- <div class="row row-padded-for-graph">
   <div class="container">
-	<div class = "col-md-12">
-		<div class= "col-md-4">
-	    		<h2>Inventory Information<br><br></h2>	
-				<div class = "col-md-6">
-		    			{{total_num_parts}} parts in inventory
-		    		</div>
-		    		<div class = "col-md-6">
-		    			{{num_parts_below_safety_stock}} parts below safety stock
-		    	</div>
-	    	</div>
-	    	<div class="col-md-8">
-	    		{% include_container chartcontainer 400 600 %}  
-	    	</div>
-    </div>
-</div>
-{% load render_table from django_tables2 %}
-<div class="row row-padded">
-  	<div class="container">
-		<div class = "col-md-12">
-		  	<h2>Parts Below Safety Stock Level</h2>
-		  	{% render_table table %}
-		</div>
-	</div>
-</div>
+	<h1 class="warning">Parts Below Safety Stock Level</h1>
+	{% render_table table %}
+  </div>
 {% endblock %}
 </section>
   <!-- Section 3 -->

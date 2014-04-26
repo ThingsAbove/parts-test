@@ -1,21 +1,59 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponse
+from django.db.models import F
 from django_tables2   import RequestConfig
 from inventory.models import Part, Bin, DemandLog
-from inventory.tables import PartTable
+from inventory.tables import PartTable, BinPartTable
 import datetime, time
-from datetime import timedelta
-from django.utils import timezone
 
 
 # Create your views here.
 ITEMS_PER_PAGE=10
 
-
 def index(request):
-    table = PartTable(Part.objects.all().order_by('name'))
+    xdata = ['Class-A Parts','Class-B Parts','Class-C Parts']
+    a_count = Part.objects.filter(part_class=Part.PART_CLASS_A).count()
+    b_count = Part.objects.filter(part_class=Part.PART_CLASS_B).count()
+    c_count = Part.objects.filter(part_class=Part.PART_CLASS_C).count()
+    ydata = [a_count, b_count, c_count]
+    chartdata = {'x':xdata, 'y':ydata}
+    charttype = "pieChart"
+    chartcontainer = 'piechart_container'
+    data = {
+        'charttype': charttype,
+        'chartdata': chartdata,
+        'chartcontainer': chartcontainer,
+        'extra': {
+            'chart_title': 'Parts by Class',
+            'x_is_date': False,
+            'x_axis_format': '',
+            'tag_script_js': True,
+            'jquery_on_ready': False,
+        }
+    }
+    data['total_num_parts']=Part.objects.all().count()
+    bins= Bin.objects.filter(part_type__safety_stock__gte=F('count')) # Select bins with count below part safety stock
+    data['num_parts_below_safety_stock']=bins.count()
+    table = BinPartTable(bins)
+    RequestConfig(request,paginate={"per_page": ITEMS_PER_PAGE}).configure(table)
+    data['table']=table
+    return render(request,'inventory/index.html', data)
+    
+def parts_at_or_below_safety_stock(request):
+    # Retrieve 
+    #bin_ids = Bin.objects.filter(part_type__safety_stock__gte=F('count')).values_list('id',flat=True)
+    #parts = Part.objects.filter(bin__in = bin_ids)
+    bins= Bin.objects.filter(part_type__safety_stock__gte=F('count')) # Select bins with count below part safety stock
+    table = BinPartTable(bins)
     RequestConfig(request,paginate={"per_page": ITEMS_PER_PAGE}).configure(table)
     return render(request, 'inventory/index.html', {'table': table})
+    
+def parts_list(request):
+    # Retrieve 
+    parts = Part.objects.all().order_by('name')
+    table = PartTable(parts)
+    RequestConfig(request,paginate={"per_page": ITEMS_PER_PAGE}).configure(table)
+    return render(request, 'inventory/parts_list.html', {'table': table})
     
 def all_parts(request):
     table = PartTable(Part.objects.all().order_by('name'))
@@ -46,7 +84,8 @@ def parts_by_class(request, part_class):
     table = PartTable(Part.objects.filter(part_class=part_class).order_by('name'))
     RequestConfig(request,paginate={"per_page": ITEMS_PER_PAGE}).configure(table)
     return render(request, 'inventory/index.html', {'table': table})
-    
+
+        
 def detail(request, inventory_id):
     part = get_object_or_404(Part, pk=inventory_id) 
     # Determine the last valid demand log entry

@@ -1,5 +1,6 @@
 from django.db import models
 from django.utils import timezone
+from datetime import timedelta
 from django.core.exceptions import ValidationError
 import moneyed
 from djmoney.models.fields import MoneyField
@@ -27,12 +28,18 @@ class Part(models.Model):
     PART_CLASS_C = 'C'
     PART_CLASS_UNKNOWN = 'U'
     PART_CLASS_CHOICES=(
-        (PART_CLASS_A, 'very tight control and accurate records'),
-        (PART_CLASS_B, 'less tightly controlled and good records'),
-        (PART_CLASS_C, 'simplest controls possible and minimal records'),
+        (PART_CLASS_A, 'A'),
+        (PART_CLASS_B, 'B'),
+        (PART_CLASS_C, 'C'),
         (PART_CLASS_UNKNOWN, 'not applicable or unknown'),
     )
     part_class = models.CharField(max_length=1, choices=PART_CLASS_CHOICES, default=PART_CLASS_C)
+    safety_stock = models.IntegerField(default=10)
+    lead_time = models.IntegerField(default=1,verbose_name="Reorder Lead Time/Days")
+    
+    @property
+    def lead_time_date(self):
+        return timezone.now() + timedelta(self.lead_time)
 
 class DemandLog(models.Model):
     def __unicode__(self):
