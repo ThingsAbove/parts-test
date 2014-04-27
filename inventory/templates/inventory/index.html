@@ -30,6 +30,7 @@
 		#parts{ 
 			height: auto;  
 			margin: 0 auto; 
+			padding: 0px 0;
 			width: 100%; 
 			position: relative; 
 			box-shadow: 0 0 50px rgba(0,0,0,0.8);
@@ -54,18 +55,17 @@
 		  }
 		}		
 		.row-padded {
-		  box-shadow: 0 0 50px rgba(0,0,0,0.8);
-		  padding: 10px;
 		  font-size: 14px;
 		  background-color: #F7F7F7;
 		  border: 1px solid #DDD;
 		}
 		.row-padded-for-graph {
-		  padding: 10px;
+		  box-shadow: 0 0 50px rgba(0,0,0,0.8);
 		  font-size: 22px;
 		  background-color: #e6e6e6;
 		  border: 1px solid #DDD;
 		}
+
 	</style>
 	<script>
 		$(document).ready(function(){
@@ -143,12 +143,18 @@
 	<div class = "col-md-12">
 		<div class= "col-md-4">
 	    		<h2>Inventory Information<br><br></h2>	
-				<div class = "col-md-6">
-		    			{{total_num_parts}} parts in inventory
+				<div class = "glyphicon glyphicon-exclamation-sign">
+					<p class = "label label-primary">
+		    			<b>{{total_num_parts}}</b> parts in inventory</p>
 		    		</div>
-		    		<div class = "col-md-6">
-		    			{{num_parts_below_safety_stock}} parts below safety stock
-		    	</div>
+		    		<div class = "glyphicon glyphicon-warning-sign">
+		    		<p class = "label label-danger">
+		    			<b>{{num_parts_below_safety_stock}}</b> parts below safety stock
+		    		</p>
+		    		</div>
+		    	<div class = "">
+			    	Some More stuff
+			</div>
 	    	</div>
 	    	<div class="col-md-8">
 	    		{% include_container chartcontainer 400 600 %}  
