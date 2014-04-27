@@ -61,7 +61,7 @@
 		}
 		.row-padded-for-graph {
 		  box-shadow: 0 0 50px rgba(0,0,0,0.8);
-		  font-size: 22px;
+		  font-size: 18px;
 		  background-color: #e6e6e6;
 		  border: 1px solid #DDD;
 		}
@@ -141,28 +141,25 @@
  <div class="row row-padded-for-graph">
   <div class="container">
 	<div class = "col-md-12">
-		<div class= "col-md-4">
-	    		<h2>Inventory Information<br><br></h2>	
-				<div class = "glyphicon glyphicon-exclamation-sign">
-					<p class = "label label-primary">
-		    			<b>{{total_num_parts}}</b> parts in inventory</p>
-		    		</div>
-		    		<div class = "glyphicon glyphicon-warning-sign">
-		    		<p class = "label label-danger">
-		    			<b>{{num_parts_below_safety_stock}}</b> parts below safety stock
-		    		</p>
-		    		</div>
-		    	<div class = "">
-			    	Some More stuff
+		<div class= "col-md-6">
+	    		<h2>Inventory Information</h2>	
+			<div class="list-group">
+			  <li class="list-group-item list-group-item-info">{{total_num_parts}} types of parts in inventory</li>
+			  <li class="list-group-item list-group-item-info">{{all_parts_count}} total parts in {{total_bins}} bins in inventory</li>
+			  <a href="#django_table" class="list-group-item list-group-item-danger">{{num_parts_below_safety_stock}} parts below safety stock</a>
+			  <li class="list-group-item list-group-item-success">{{num_suppliers}} Suppliers</li>
+			  <li class="list-group-item list-group-item-warning">Parts bin for [<a href="/inventory/{{oldest_replenished_bin.part_type.id}}">{{oldest_replenished_bin.part_type.name}}</a>]
+				  located at [{{oldest_replenished_bin.location}}] 
+				  has the least use and was last replenished on [{{oldest_replenished_bin.replenish_date}}]</li>
 			</div>
 	    	</div>
-	    	<div class="col-md-8">
+	    	<div class="col-md-6">
 	    		{% include_container chartcontainer 400 600 %}  
 	    	</div>
     </div>
 </div>
 {% load render_table from django_tables2 %}
-<div class="row row-padded">
+<a id="django_table"><div class="row row-padded"></a>
   	<div class="container">
 		<div class = "col-md-12">
 		  	<h2>Parts Below Safety Stock Level</h2>

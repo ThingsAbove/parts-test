@@ -17,6 +17,7 @@ except:
     print "Problem getting last demandlog date" 
 
 if days_to_fill <= 0:
+    print 'nothing to do... exiting'
     sys.exit() # Nothing to do
         
 for p in part_list:

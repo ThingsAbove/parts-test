@@ -1,9 +1,9 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
 from django.http import HttpResponse
-from django.db.models import F
+from django.db.models import F, Sum
 from django_tables2   import RequestConfig
 from inventory.models import Part, Bin, DemandLog
-from inventory.tables import PartTable, BinPartTable
+from inventory.tables import PartTable, BinPartTable, Supplier, Location
 import datetime, time
 
 
@@ -37,6 +37,10 @@ def index(request):
     table = BinPartTable(bins)
     RequestConfig(request,paginate={"per_page": ITEMS_PER_PAGE}).configure(table)
     data['table']=table
+    data['all_parts_count']=Bin.objects.aggregate(Sum('count'))['count__sum']
+    data['num_suppliers']=Supplier.objects.all().count()
+    data['oldest_replenished_bin']=Bin.objects.all().earliest('replenish_date')
+    data['total_bins']=Bin.objects.all().count()
     return render(request,'inventory/index.html', data)
     
 def parts_at_or_below_safety_stock(request):
