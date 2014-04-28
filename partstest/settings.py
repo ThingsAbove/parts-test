@@ -71,7 +71,7 @@ DATABASES = {
         'ENGINE':'django.db.backends.postgresql_psycopg2',
         'NAME': 'inventory',
         'USER': 'ccarpenter',
-        'PASSWORD': 'bluesky73',
+        'PASSWORD': 'nopass',
         'HOST': '127.0.0.1',
         'PORT': '5432',
    }
