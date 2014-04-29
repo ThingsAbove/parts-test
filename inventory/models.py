@@ -6,6 +6,7 @@ import moneyed
 from djmoney.models.fields import MoneyField
 from moneyed import Money, USD
 from django.db.models import Count, Max, Avg, Sum
+from decimal import Decimal
 
 # Create your models here.
 SECS_IN_DAY = 86400 # seconds in a day
@@ -36,10 +37,10 @@ class Part(models.Model):
     part_class = models.CharField(max_length=1, choices=PART_CLASS_CHOICES, default=PART_CLASS_C)
     safety_stock = models.IntegerField(default=10)
     lead_time = models.IntegerField(default=1,verbose_name="Reorder Lead Time/Days")
-    
     @property
     def lead_time_date(self):
         return timezone.now() + timedelta(self.lead_time)
+
 
 class DemandLog(models.Model):
     def __unicode__(self):

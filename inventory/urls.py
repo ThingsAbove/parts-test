@@ -1,11 +1,18 @@
-from django.conf.urls import patterns, url
-
+try:
+    from django.conf.urls import *
+except:
+    from django.conf.urls.defaults import *
+from django.conf.urls.static import static
 from inventory import views
+from ajax_select import urls as ajax_select_urls
 
 urlpatterns = patterns('',
-    url(r'^$', views.index, name='index'),
+    url(r'^$', views.home, name='home'),
+    url(r'^part/edit/(?P<id>\d+)?$', views.edit_part, name='edit_part'),
     url(r'^parts/$', views.parts_list, name='parts_list'),
-    url(r'^parts/(?P<part_class>[A-C]{1})/$', views.parts_by_class, name='parts_by_class'),
+    
+    url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
+
     url(r'^piechart/$', views.piechart, name='piechart'),
     url(r'^barchart/$', views.barchart, name='barchart'),
     url(r'^(?P<inventory_id>\d+)/linechart/$', views.linechart, name='linechart'),

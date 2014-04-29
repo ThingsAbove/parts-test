@@ -1,16 +1,22 @@
 from django.shortcuts import render, get_object_or_404, render_to_response
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponse
+from django.template import RequestContext
 from django.db.models import F, Sum
 from django_tables2   import RequestConfig
 from inventory.models import Part, Bin, DemandLog
 from inventory.tables import PartTable, BinPartTable, Supplier, Location
+from inventory.forms import PartForm
+from django import forms
+from ajax_select.fields import AutoCompleteField
+
 import datetime, time
 
 
 # Create your views here.
-ITEMS_PER_PAGE=10
+ITEMS_PER_PAGE=20
 
-def index(request):
+def home(request):
     xdata = ['Class-A Parts','Class-B Parts','Class-C Parts']
     a_count = Part.objects.filter(part_class=Part.PART_CLASS_A).count()
     b_count = Part.objects.filter(part_class=Part.PART_CLASS_B).count()
@@ -41,17 +47,8 @@ def index(request):
     data['num_suppliers']=Supplier.objects.all().count()
     data['oldest_replenished_bin']=Bin.objects.all().earliest('replenish_date')
     data['total_bins']=Bin.objects.all().count()
-    return render(request,'inventory/index.html', data)
-    
-def parts_at_or_below_safety_stock(request):
-    # Retrieve 
-    #bin_ids = Bin.objects.filter(part_type__safety_stock__gte=F('count')).values_list('id',flat=True)
-    #parts = Part.objects.filter(bin__in = bin_ids)
-    bins= Bin.objects.filter(part_type__safety_stock__gte=F('count')) # Select bins with count below part safety stock
-    table = BinPartTable(bins)
-    RequestConfig(request,paginate={"per_page": ITEMS_PER_PAGE}).configure(table)
-    return render(request, 'inventory/index.html', {'table': table})
-    
+    return render(request,'inventory/home.html', data)
+        
 def parts_list(request):
     # Retrieve 
     parts = Part.objects.all().order_by('name')
@@ -82,12 +79,12 @@ def all_parts(request):
     }
     RequestConfig(request,paginate={"per_page": ITEMS_PER_PAGE}).configure(table)    
     data['table']=table
-    return render(request, 'inventory/index.html', data)
+    return render(request, 'inventory/home.html', data)
     
 def parts_by_class(request, part_class):
     table = PartTable(Part.objects.filter(part_class=part_class).order_by('name'))
     RequestConfig(request,paginate={"per_page": ITEMS_PER_PAGE}).configure(table)
-    return render(request, 'inventory/index.html', {'table': table})
+    return render(request, 'inventory/home.html', {'table': table})
 
         
 def detail(request, inventory_id):
@@ -190,3 +187,22 @@ def linechart(request, inventory_id):
 
     return render(request,'inventory/linechart.html', data)
     
+@login_required(login_url="/inventory/login")
+def edit_part(request, id=None):
+    form_args = {}
+    part = get_object_or_404(Part, pk=id) 
+    # else create new Part...        
+
+    if request.POST:
+        part_form = PartForm(request.POST, instance = part)
+        if part_form.is_valid():
+            part = part_form.save(commit=True)
+    else:
+        part_form = PartForm(instance = part)
+
+    return render_to_response('inventory/part.html',
+        {
+            'part_form': part_form
+        },
+        context_instance=RequestContext(request)
+    )
