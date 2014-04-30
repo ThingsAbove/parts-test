@@ -67,6 +67,8 @@ DATABASES = {
 #        'ENGINE': 'django.db.backends.sqlite3',
 #        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
 #    }
+   }
+>>>>>>> 31ae7163c9f7151156768f19e13c5fc11d667020
 }
 
 # Internationalization
