@@ -4,7 +4,7 @@ except:
     from django.conf.urls.defaults import *
 from django.conf.urls.static import static
 from inventory import views
-from ajax_select import urls as ajax_select_urls
+
 
 urlpatterns = patterns('',
     url(r'^$', views.home, name='home'),

@@ -8,7 +8,6 @@ from inventory.models import Part, Bin, DemandLog
 from inventory.tables import PartTable, BinPartTable, Supplier, Location
 from inventory.forms import PartForm
 from django import forms
-from ajax_select.fields import AutoCompleteField
 
 import datetime, time
 
