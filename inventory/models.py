@@ -40,7 +40,9 @@ class Part(models.Model):
     @property
     def lead_time_date(self):
         return timezone.now() + timedelta(self.lead_time)
-
+    @staticmethod
+    def autocomplete_search_fields():
+        return ("id__iexact", "name__icontains",)
 
 class DemandLog(models.Model):
     def __unicode__(self):
