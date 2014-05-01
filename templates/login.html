@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load bootstrap3 %}
+
+{# Load CSS and JavaScript #}
+
+{% bootstrap_css %}
+{% bootstrap_javascript %}
+
+
+
+{% block title %}Login{% endblock %}
+
+{% block toggle_login %}{% endblock %}
+
+{% block heading %}
+<h2>Login</h2>
+{% endblock %}
+
+
+{% block content %}
+{# Display django.contrib.messages as Bootstrap alerts #}
+{% bootstrap_messages %}
+
+
+<link href="{{ STATIC_URL }}css/signin.css" rel="stylesheet">
+
+<div class="container">
+<div class="row" >
+<div class="col-md-4 col-md-offset-4">
+<form action="{% url "mysite_login" %}" method="post" accept-charset="utf-8" >
+	<h2 class="form-signin-heading">Please sign in</h2><br>
+	{% bootstrap_form form %}
+	{% csrf_token %}
+	<input type="hidden" name="next" value="{{ next }}" />
+	{% buttons %}
+		<button class="btn btn-lg btn-primary btn-block" type="submit" />
+		{% bootstrap_icon "star" %} Login
+	{% endbuttons %}
+</form>
+</div>
+</div>
+</div>
+{% endblock %}

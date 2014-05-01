@@ -12,7 +12,11 @@
 
 {% block content %}
 
-<h1>{{ part.name }}</h1>
+<div class="container">
+<div class="row" >
+<div class="col-md-4 col-md-offset-2"> 
+
+<h1>Part {{ part.name }}</h1>
 
 {% if error_message %}<p><strong>{{ error_message }}</strong></p>{% endif %}
 
@@ -31,4 +35,7 @@
 		</div>
 	</div>
 </form>
+</div>
+</div>
+</div>
 {% endblock %}

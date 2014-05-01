@@ -12,7 +12,7 @@ urlpatterns = patterns('',
     url(r'^parts/$', views.parts_list, name='parts_list'),
     
     url(r'^login/$', 'django.contrib.auth.views.login', name='login'),
-
+    url(r'^logout/$', 'django.contrib.auth.views.logout', name='logout'),
     url(r'^piechart/$', views.piechart, name='piechart'),
     url(r'^barchart/$', views.barchart, name='barchart'),
     url(r'^(?P<inventory_id>\d+)/linechart/$', views.linechart, name='linechart'),

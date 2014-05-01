@@ -125,3 +125,7 @@ STATICFILES_FINDERS = (
 # Grappelli config
 GRAPPELLI_ADMIN_TITLE = 'Inventory Admin'
 
+LOGIN_URL = 'mysite_login'
+LOGOUT_URL = 'mysite_logout'
+LOGIN_REDIRECT_URL = '/'
+

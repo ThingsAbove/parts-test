@@ -186,7 +186,7 @@ def linechart(request, inventory_id):
 
     return render(request,'inventory/linechart.html', data)
     
-@login_required(login_url="/inventory/login")
+@login_required()
 def edit_part(request, id=None):
     form_args = {}
     part = get_object_or_404(Part, pk=id) 

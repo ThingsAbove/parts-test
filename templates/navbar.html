@@ -1,3 +1,16 @@
+<style class="text/css">
+	.inverse-dropdown{
+	  background-color: #222;
+	  border-color: #080808;
+	  &>li>a{
+		color: #999;
+		&:hover{
+		  color: #fff;
+		  background-color: #000;
+		}
+	  }
+	}
+</style>
 		<!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
          	<div class="container">
@@ -14,9 +27,14 @@
          		<ul id="nav" class="nav navbar-nav navbar-right">
         			<li class="{% block navbar-home %}{% endblock %}"><a href="{% url 'home' %}">Home</a></li>
         			<li class="{% block navbar-detail %}{% endblock %}"><a href="{% url 'parts_list' %}">Parts List</a></li>
-        			<li class="{% block navbar-admin %}{% endblock %}"><a href="/admin/">Admin</a></li>
-				<li class="{% block navbar-about %}{% endblock %}"><a href="{% url 'about' %}">About</a></li>
+ 				<li class="{% block navbar-about %}{% endblock %}"><a href="{% url 'about' %}">About</a></li>
 				<li class="{% block navbar-contact %}{% endblock %}"><a href="{% url 'contact' %}">Contact</a></li>
+				<li class="dropdown">
+					<a href="#" data-toggle="dropdown" class="dropdown-toggle">{{ user }} <b class="caret"></b></a>
+					<ul class="dropdown-menu">
+	 						<li class="{% block navbar-login %}{% endblock %}"><a href="{% url 'mysite_login' %}">Login</a></li>     
+	 						<li class="{% block navbar-logout %}{% endblock %}"><a href="{% url 'mysite_logout' %}">Logout</a></li>
+	 				</ul>
          		</ul>
          	  </div><!--/.nav-collapse -->
           </div>
