@@ -10,8 +10,7 @@ counter = itertools.count()
 class PartTable(tables.Table):
 	#name = tables.Column(verbose_name="part name")
 	name = tables.TemplateColumn('<a href="/inventory/{{record.id}}">{{record.name}}</a>')
-	edit = tables.TemplateColumn('<a href="/inventory/part/edit/{{record.id}}"><i class="glyphicon glyphicon-edit"></i></a>',verbose_name = ("Action"))
-	description = tables.Column(orderable=False)
+	edit = tables.TemplateColumn('<a href="/inventory/part/edit/{{record.id}}"><i class="glyphicon glyphicon-edit"></i></a>',verbose_name = ("Action"), orderable=False)
 	class Meta:
 		model = Part
 		# add class="paleblue" to <table> tag
