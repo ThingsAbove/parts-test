@@ -1,6 +1,7 @@
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
+
 admin.autodiscover()
 
 urlpatterns = patterns('',
@@ -16,7 +17,8 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('django.contrib.auth.views',
-    url(r'^login/$', 'login', {'template_name': 'login.html'},
-        name='mysite_login'),
+    url(r'^login/$', 'login', {'template_name': 'login.html'}, name='mysite_login'),
     url(r'^logout/$', 'logout', {'next_page': '/'}, name='mysite_logout'),
+    url(r'^password_change/$','password_change', {'template_name': 'password_change_form.html'}, name='mysite_change_password'),
+    url(r'^password_change_done$', 'password_change_done', {'template_name': 'password_change_done.html'}, name='password_change_done'),
 )

@@ -1,16 +1,3 @@
-<style class="text/css">
-	.inverse-dropdown{
-	  background-color: #222;
-	  border-color: #080808;
-	  &>li>a{
-		color: #999;
-		&:hover{
-		  color: #fff;
-		  background-color: #000;
-		}
-	  }
-	}
-</style>
 		<!-- Navigation -->
         <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
          	<div class="container">
@@ -34,6 +21,7 @@
 					<ul class="dropdown-menu">
 	 						<li class="{% block navbar-login %}{% endblock %}"><a href="{% url 'mysite_login' %}">Login</a></li>     
 	 						<li class="{% block navbar-logout %}{% endblock %}"><a href="{% url 'mysite_logout' %}">Logout</a></li>
+	 						<li class="{% block navbar-pass_change %}{% endblock %}"><a href="{% url 'mysite_change_password' %}">Change Password</a></li>
 	 				</ul>
          		</ul>
          	  </div><!--/.nav-collapse -->

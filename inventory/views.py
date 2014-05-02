@@ -8,6 +8,7 @@ from inventory.models import Part, Bin, DemandLog
 from inventory.tables import PartTable, BinPartTable, Supplier, Location
 from inventory.forms import PartForm
 from django import forms
+from django.contrib.auth.forms import PasswordChangeForm
 
 import datetime, time
 
@@ -205,3 +206,4 @@ def edit_part(request, id=None):
         },
         context_instance=RequestContext(request)
     )
+    
