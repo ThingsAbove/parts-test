@@ -42,6 +42,7 @@ INSTALLED_APPS = (
     'moneyed',
     'djmoney',
     'django_nvd3',
+    'partstest',
     'inventory',
 #    'south',
 )

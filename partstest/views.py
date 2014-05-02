@@ -4,8 +4,6 @@ from django.http import HttpResponse
 from django.template import RequestContext
 from django_tables2   import RequestConfig
 
-
-
 def about(request):
     return render(request,'about.html')
         

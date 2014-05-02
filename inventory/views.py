@@ -12,7 +12,6 @@ from django.contrib.auth.forms import PasswordChangeForm
 
 import datetime, time
 
-
 # Create your views here.
 ITEMS_PER_PAGE=20
 

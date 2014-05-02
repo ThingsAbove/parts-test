@@ -1,29 +1,30 @@
-		<!-- Navigation -->
-        <nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
-         	<div class="container">
-         	  <div class="navbar-header">
-         		<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-        		  <span class="sr-only">Toggle navigation</span>
-         		  <span class="icon-bar"></span>
-         		  <span class="icon-bar"></span>
-         		  <span class="icon-bar"></span>
-         		</button>
-         		<a class="navbar-brand" href="/">Inventory Example Application</a>
-         	  </div>
-         	  <div class="collapse navbar-collapse navbar-ex1-collapse">
-         		<ul id="nav" class="nav navbar-nav navbar-right">
-        			<li class="{% block navbar-home %}{% endblock %}"><a href="{% url 'home' %}">Home</a></li>
-        			<li class="{% block navbar-detail %}{% endblock %}"><a href="{% url 'parts_list' %}">Parts List</a></li>
- 				<li class="{% block navbar-about %}{% endblock %}"><a href="{% url 'about' %}">About</a></li>
-				<li class="{% block navbar-contact %}{% endblock %}"><a href="{% url 'contact' %}">Contact</a></li>
-				<li class="dropdown">
-					<a href="#" data-toggle="dropdown" class="dropdown-toggle">{{ user }} <b class="caret"></b></a>
-					<ul class="dropdown-menu">
-	 						<li class="{% block navbar-login %}{% endblock %}"><a href="{% url 'mysite_login' %}">Login</a></li>     
-	 						<li class="{% block navbar-logout %}{% endblock %}"><a href="{% url 'mysite_logout' %}">Logout</a></li>
-	 						<li class="{% block navbar-pass_change %}{% endblock %}"><a href="{% url 'mysite_change_password' %}">Change Password</a></li>
-	 				</ul>
-         		</ul>
-         	  </div><!--/.nav-collapse -->
-          </div>
-        </nav>
+{% load tags %}
+<!-- Navigation -->
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="/">Inventory Example Application</a>
+      </div>
+      <div class="collapse navbar-collapse navbar-ex1-collapse">
+        <ul id="nav" class="nav navbar-nav navbar-right">
+        	<li class="{% active request "^/$|/inventory/$" %}"><a href="{% url 'home' %}">Home</a></li>
+        	<li class="{% active request "^.*part.*|/inventory/\d+" %}"><a href="{% url 'parts_list' %}">Parts List</a></li>
+ 		<li class="{% active request "^.*about.*" %}"><a href="{% url 'about' %}">About</a></li>
+		<!--<li class="{% active request "^.*contact.*" %}"><a href="{% url 'contact' %}">Contact</a></li>-->
+		<li class="dropdown">
+			<a href="#" data-toggle="dropdown" class="dropdown-toggle">{{ user }} <b class="caret"></b></a>
+			<ul class="dropdown-menu">
+	 				<li class="{% block navbar-login %}{% endblock %}"><a href="{% url 'mysite_login' %}">Login</a></li>     
+	 				<li class="{% block navbar-logout %}{% endblock %}"><a href="{% url 'mysite_logout' %}">Logout</a></li>
+	 				<li class="{% block navbar-pass_change %}{% endblock %}"><a href="{% url 'mysite_change_password' %}">Change Password</a></li>
+	 		</ul>
+        </ul>
+      </div><!--/.nav-collapse -->
+  </div>
+</nav>
